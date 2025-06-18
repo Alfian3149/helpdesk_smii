@@ -1,0 +1,105 @@
+{% extends 'helpdesk/base.html' %}
+
+{% block content %}
+
+{% load static %}
+<div class="right_col" role="main">
+    <div class="">
+      	<div class="page-title">
+            <div class="title_left">
+              <h4>Check Department Head Approver</h4>
+            </div>
+
+      	</div>
+      
+  		<div class="clearfix"></div>
+
+      	<div class="row">
+        	<div class="col-md-12 col-sm-12 ">
+          		<div class="x_panel">
+
+
+	                <div class="x_content">
+	                  {% if messages %}
+	                  {% for message in messages %}
+	                  <div {% if message.tags %} class="alert alert-{{message.tags}} alert-dismissible " role="alert" {% endif %}>
+	                    <strong style="text-transform:uppercase">{{message.tags}} :</strong> {{ message }}.
+	                  </div>
+	                  {% endfor %}
+	                  {% endif %}
+	                  <br />
+	                </div>
+
+	                <form id="demo-form2" method="POST" class="form-horizontal form-label-left" >
+					{% csrf_token %} 
+
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-12 col-sm-12  form-group">
+                      <label class="col-form-label col-md-12" for="last-name">Department
+                      </label>
+                      <div class="col-md-12 col-sm-6 ">
+                        <input  value="{{deptid}}" type="text" id="last-name" name="deptid"  class="form-control">
+                      </div>
+                    </div>
+
+
+			 		<div class="col-md-12 col-sm-12  form-group">
+
+
+	                    <div class="col-md-12 col-sm-12 form-group float-left">
+	                        <button type="submit" class="btn btn-success">Check</button>
+	                     
+	                    </div> 
+              		</div>
+
+                    </form>
+					
+				<!--
+								
+				{%for employee in employees%}
+					{{employee.empid}}
+					{{employee.name}}
+					{{employee.position}}
+					{{employee.head}} 
+					
+					{%if employee.position.isapprover%}
+						<span style="color:Blue;">Yes </span>
+					{%else%}
+						<span >No </span>
+					{%endif%}
+					<br>
+					
+					{%for depart in employee.departments.all%}
+						<h4>Department: {{depart.costcentre}} {{depart.name}} </h4>
+
+						<br>
+					{%endfor%}
+					
+				{%endfor%}
+				
+			
+				{%for depart in departments%}
+					<h4>Department: {{depart.name}} </h4>
+					{%for emp in depart.employee.all%}
+						{{emp.empid}}
+						{{emp.name}}
+						{{emp.position}}
+						{{emp.head}} 
+					{%endfor%}
+				{%endfor%}
+				
+				-->
+				
+            	</div>
+				
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

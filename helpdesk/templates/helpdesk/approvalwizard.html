@@ -1,0 +1,63 @@
+<!-- Smart Wizard -->
+
+<div class="row">
+    <div class="col-md-12" >
+        <div class="col-md-12">
+            <div id="wizard" class="form_wizard wizard_horizontal">
+                {%if 'prfview' in request.path%}
+                <!-- 2 LEVEL PRF ATAU REQUEST DIATAS 5 JT-->
+                <ul class="wizard_steps">
+                    <li>
+                        <a class="{{approver_wizard|last}}" href="#" style="width:85%">
+                            <span class="step_no">1</span>
+                            <span class="step_descr" >{{approver_wizard|first}}<br/>
+                                <small></small>
+                            </span>
+                        </a>
+                    </li>
+                    {%if approver_wizard_level2|first%}
+                    <li>
+                        <a class="{{approver_wizard_level2|last}}" href="#" isdone="1" rel="1">
+                            <span class="step_no">2</span>
+                            <span class="step_descr"> {{approver_wizard_level2|first}}<br/>
+                                <small></small>
+                            </span>
+                        </a>
+                    </li>
+                    {%endif%}
+                    <li>
+                        <a class="{{isapproved_mis|first}}" href="#" isdone="1" rel="1">
+                            <span class="step_no">3</span>
+                            <span class="step_descr"> MIS Department<br/>
+                                <small></small>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                {%else%}    
+                <!-- HANYA 1 LEVEL CRF & SRF ATAU REQUEST DIBAWAH 5 JT-->
+                    <ul class="wizard_steps">
+                        <li>
+                            <a class="{{approver_wizard|last}}" href="#" style="width:85%">
+                                <span class="step_no">1</span>
+                                <span class="step_descr" >{{approver_wizard|first}}<br/>
+                                    <small></small>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{{isapproved_mis|first}}" href="#step-2" isdone="1" rel="1">
+                                <span class="step_no">2</span>
+                                <span class="step_descr"> MIS Department<br/>
+                                    <small></small>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End SmartWizard Content -->

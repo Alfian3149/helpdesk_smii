@@ -1,0 +1,222 @@
+{% extends 'helpdesk/base.html' %}
+
+{% block content %}
+    <div class="right_col" role="main">
+        <div class="">
+          <div class="page-title">
+            <div class="title_left">
+              <h4>Form Cash Advance</h4>
+            </div>
+
+          </div>
+          <div class="clearfix"></div>
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12 ">
+              <div class="x_panel">
+
+                <div class="x_content">
+                  {% if messages %}
+                  {% for message in messages %}
+                  <div {% if message.tags %} class="alert alert-{{message.tags}} alert-dismissible " role="alert" {% endif %}>
+                    <strong style="text-transform:uppercase">{{message.tags}} :</strong> {{ message }}.
+                  </div>
+                  {% endfor %}
+                  {% endif %}
+                  <br />
+
+                  <form id="demo-form2" method="POST" action="submitcash" class="form-horizontal form-label-left" >
+                    {% csrf_token %} 
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-4 col-sm-3 label-align" for="first-name">Name Of Employee
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input value="{{employees.name}}" readonly type="text" id="first-name"  class="form-control ">
+                      </div>
+                    </div>
+
+                   <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Department 
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <select  name="departselect" class="select2_single form-control" tabindex="-1">
+                          {% for depart in employees.departments.all %}   
+  
+                          <option value="{{depart.id}}">{{ depart.name }}</option>
+                          
+                           {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                   
+                    </div>  
+
+
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label for="middle-name" class="col-form-label col-md-3 col-sm-3 label-align">Area</label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <textarea readonly name="desc" id="formrequest" class="form-control">{{employees.area}}</textarea>
+                      </div>
+                    </div>
+
+                  	<div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-4 col-sm-3 label-align" for="last-name">Cost Centre 
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <select  id="costcenter_cash" name="costcenter" class="select2_single form-control" tabindex="-1">
+                          <option>Choose..</option>
+                           {% for department in departments %}
+
+                          <option value="{{department.id}}">{{department.costcentre}} - {{department.name}}</option>
+                          
+                           {% endfor %}
+                      </select>
+
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Name of Requestor 
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <select id="requestor_cash" name="requestor" class="form-control">
+                          <option value="">Choose..</option>
+                         
+                      </select>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-4 col-sm-3 label-align" for="last-name">Proposal Date
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input value="{{datetoday}}" readonly type="text" id="last-name" name="porposaldate" required="required" class="form-control">
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Advance No
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input value="{{lastcode}}" readonly type="text" id="last-name" name="advance_no" required="required" class="form-control">
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-4 col-sm-3 label-align" for="last-name">Amount
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <div class="input-group input-group-sm">
+                          <label class="input-group-addon" for="dataHeight" style="height: 32px;font-size: 15px;">Rp</label>
+                          <input name="amount" id='uang' type="text" placeholder =".0" class="form-control" id="dataHeight" style="font-size: 15px;" >
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-3 col-sm-3 label-align" for="last-name">Need Date
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                          <input id="birthday" name="needdate" class="date-picker form-control"  onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
+                        <script>
+                          function timeFunctionLong(input) {
+                            setTimeout(function() {
+                              input.type = 'text';
+                            }, 60000);
+                          }
+                        </script>
+                      </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-12 col-sm-12  form-group">
+                      <label class="col-form-label col-md-2 col-sm-3 label-align" for="last-name">Purpose
+                      </label>
+                      <div class="col-md-6 col-sm-12">
+                        <textarea id="message" class="form-control" name="purpose" ></textarea>
+
+                      </div>
+                    </div>
+
+  				 	<div class="col-md-12 col-sm-12  form-group">
+
+
+	                    <div class="form-group float-right">
+	                      
+	                        <button class="btn btn-primary" type="button" onclick="history.back()">Back</button>
+	                        <button type="submit" class="btn btn-success">Submit</button>
+	                     
+	                    </div> 
+              		</div>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+         
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+    $(function(){
+      $("#uang").keyup(function(e){
+        $(this).val(format($(this).val()));
+      });
+    });
+    var format = function(num){
+      var str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
+      if(str.indexOf(",") > 0) {
+        parts = str.split(",");
+        str = parts[0];
+      }
+      str = str.split("").reverse();
+      for(var j = 0, len = str.length; j < len; j++) {
+        if(str[j] != ".") {
+          output.push(str[j]);
+          if(i%3 == 0 && j < (len - 1)) {
+            output.push(".");
+          }
+          i++;
+        }
+      }
+      formatted = output.reverse().join("");
+      return("" + formatted + ((parts) ? "," + parts[1].substr(0, 2) : ""));
+    };
+    </script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script> 
+<script>
+    $("#costcenter_cash").change(function () {
+        const subjectId = $(this).val();  // get the selected subject ID from the HTML dropdown list 
+        $.ajax({                       // initialize an AJAX request
+            type: "POST",
+            url: '{% url "get_employee_department_ajax" %}',
+            data: {
+                'positionid': subjectId,       // add the country id to the POST parameters
+                'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {   // `data` is from `get_topics_ajax` view function
+                let html_data = '<option value="">Choose</option>';
+                data.forEach(function (data) {
+                    html_data += `<option value="${data.id}">${data.name}</option>`
+                });
+                $("#requestor_cash").html(html_data); // replace the contents of the topic input with the data that came from the server
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}

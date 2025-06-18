@@ -1,0 +1,176 @@
+{% extends 'helpdesk/base.html' %}
+
+{% block content %}
+
+{% load static %}
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+              <h4>Manage Request Form</h4>
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <a href="{% url 'listrequest' %}" class="btn btn-app" style="background-color: white; color: black;">
+                            <i class="fa fa-cog"></i> Manage
+                        </a>
+                        <a href="{% url 'historyrequest' %}" class="btn btn-app" style="background-color:#E4E0DF">
+                            <i class="fa fa-calendar"></i> History
+                        </a>
+
+                        <ul class="nav navbar-right panel_toolbox" style="background-color: white;">
+                            <li>
+                                <form class="form-inline" method="POST" action="{% url 'listrequest' %}">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label for="ex3" class="col-form-label"></label>
+                                        <input value="{{fldate1_value}}" name="fldate1" type="text" id="date" class="date-picker form-control" placeholder=" " onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
+                                        <script>
+                                            function timeFunctionLong(input) {
+                                                setTimeout(function() {
+                                                    input.type = 'text';
+                                                }, 60000);
+                                            }
+                                        </script>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ex4" class="col-form-label"> &nbsp To &nbsp </label>
+                                        <input value="{{fldate2_value}}"  name="fldate2" type="text" id="date" class="date-picker form-control" placeholder=" " onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
+                                        <script>
+                                            function timeFunctionLong(input) {
+                                                setTimeout(function() {
+                                                    input.type = 'text';
+                                                }, 60000);
+                                            }
+                                        </script>
+                                        <input type='text' value="0" name="idrequest" hidden>
+                                        &nbsp <button type="submit" class="btn btn-secondary" ><i class="fa fa-filter"></i></button></button>
+                                        <a href="{% url 'listrequest' %}"> 
+                                        <button type="button" class="btn btn-secondary" ><i class="fa fa-close"></i></button>
+                                        </a>
+
+                                    </div>
+                                 
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="x_content">
+                            
+                        <div class="row">
+                          
+                            <div class="col-sm-12">
+                                
+                                <div class="card-box table-responsive">
+
+                                    <table id="bootstrapdatatable" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Karyawan</th>
+                                            <th>Department</th>
+                                            <th>Request</th>
+                                            <th>Request Date</th>
+                                            <th>Type Request</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
+                                           
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {% for frequest in frequests %}
+                                            <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>{{frequest.employee.name}}</td>
+                                                <td>{{frequest.department.costcentre}}&nbsp;{{frequest.department.name}}</td>
+                                                <td> {% if frequest.item %} {{frequest.item|wordwrap:15|linebreaksbr}}  {% else %}  {{frequest.description|wordwrap:15|linebreaksbr}}  {% endif %}</td>
+                                                <td>{{frequest.submitted|date:"d M Y"}}</td>
+                                                <td>
+                                                    {% if frequest.type == "CRF" %}
+                                                        {{'CONSUMABLES REQUEST'|wordwrap:10|linebreaksbr}}
+                                                    {% elif frequest.type == "SRF" %}
+                                                        {{'SERVICE REQUEST'|wordwrap:10|linebreaksbr}}
+                                                    {% elif frequest.type == "PRF" %}
+                                                        {{'PERIPHERAL  REQUEST'|wordwrap:10|linebreaksbr}}
+                                                    {% endif %}
+                                                </td>
+                                                <td>{% if frequest.status == "DELAYED" %}
+                                                        <span class="badge badge-warning">{{frequest.status}}</span>
+                                                    {% elif frequest.status == "APPROVE" %}
+                                                        <span class="badge bg-green">{{frequest.status}}</span>
+                                                    {% elif frequest.status == "FINISHED" %}
+                                                        <span class="badge bg-green">{{frequest.status}}</span>
+                                                    {% elif frequest.status == "REJECTED" %}
+                                                    <span class="badge badge-danger">{{frequest.status}}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    {% if frequest.type == "CRF" %}
+                                                    <a href="{% url 'crfview' frequest.id 1000 %}"  style="min-width:5%; " >
+                                                        <button class="btn btn-sm btn-dark" type="button">
+                                                            <i class="fa fa-eye"></i>
+                                                        </button>
+                                                    </a>
+                                                   {% elif frequest.type == "SRF" %}
+                                                   <a href="{% url 'srfview' frequest.id 1000 %}"  style="min-width:5%; " >
+                                                        <button class="btn btn-sm btn-dark" type="button">
+                                                        <i class="fa fa-eye"></i>
+                                                        </button>
+                                                     </a>                                                   
+                                                    {% elif frequest.type == "PRF" %}
+                                                    <a href="{% url 'prfview' frequest.id 1000 %}"  style="min-width:5%; " >
+                                                        <button class="btn btn-sm btn-dark" type="button">
+                                                            <i class="fa fa-eye"></i>
+                                                        </button>
+                                                   </a>                                                    
+                                                    {% endif %}
+
+                                               
+                                                    {%if frequest.id in canDeleteListID or request.user.is_staff == True and frequest.status == 'DELAYED' %}
+                                                        <form method="POST" action="{% url 'listrequest'%}">
+                                                        {% csrf_token %}
+                                                        <input type='text' value="{{frequest.id}}" name="idrequest" hidden>
+
+                                                        <input type='text' name="fldate1" value="{{fldate1_value}}" hidden>
+
+                                                        <input type='text' name="fldate2" value="{{fldate2_value}}" hidden>
+
+                                                        <button onClick="return confirm('Are sure you to delete?')" class="btn btn-sm btn-danger" type="submit">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                        
+                                                        
+                                                        </form>
+                                                    {%endif%}
+
+                                                  
+                                                </td>
+                                                
+                                            </tr>
+                                       
+
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

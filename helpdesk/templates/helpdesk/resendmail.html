@@ -1,0 +1,79 @@
+{% extends 'helpdesk/base.html' %}
+
+{% block content %}
+
+{% load static %}
+<div class="right_col" role="main">
+    <div class="">
+      	<div class="page-title">
+            <div class="title_left">
+              <h4>Resend Email</h4>
+            </div>
+
+      	</div>
+      
+  		<div class="clearfix"></div>
+
+      	<div class="row">
+        	<div class="col-md-12 col-sm-12 ">
+          		<div class="x_panel">
+
+
+	                <div class="x_content">
+	                  {% if messages %}
+	                  {% for message in messages %}
+	                  <div {% if message.tags %} class="alert alert-{{message.tags}} alert-dismissible " role="alert" {% endif %}>
+	                    <strong style="text-transform:uppercase">{{message.tags}} :</strong> {{ message }}.
+	                  </div>
+	                  {% endfor %}
+	                  {% endif %}
+	                  <br />
+	                </div>
+
+	                <form id="demo-form2" method="GET" class="form-horizontal form-label-left" >
+
+                     <div class="col-md-12 col-sm-12  form-group">
+                      <label class="col-form-label col-md-12" for="last-name">Request Type 
+                      </label>
+                      <div class="col-md-12 col-sm-6 ">
+                        <select  name="requesttype" class="select2_single form-control" tabindex="-1">
+                          {% for lst in typeList %}   
+					
+                          <option value="{{lst}}">{{lst}}</option>
+                          
+                           {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-12 col-sm-12  form-group">
+                      <label class="col-form-label col-md-12" for="last-name">Request Number
+                      </label>
+                      <div class="col-md-12 col-sm-6 ">
+                        <input  type="text" id="last-name" name="requestnumber" required="required" class="form-control">
+                      </div>
+                    </div>
+
+
+			 		<div class="col-md-12 col-sm-12  form-group">
+
+
+	                    <div class="col-md-12 col-sm-12 form-group float-left">
+	                        <button type="submit" class="btn btn-success">Send</button>
+	                     
+	                    </div> 
+              		</div>
+
+                    </form>
+            	</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

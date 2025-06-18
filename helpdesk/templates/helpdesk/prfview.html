@@ -1,0 +1,186 @@
+{% extends 'helpdesk/base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="right_col" role="main">
+  <div class="">
+    <div class="row">
+      <div class="col-md-10 col-sm-12 ">
+        <div class="x_content">
+          {% include 'helpdesk/approvalwizard.html'%}    
+
+        </div>
+              
+      </div>
+
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="row">
+    
+      <div class="col-md-10 col-sm-12">
+        <div class="x_panel">
+
+          <div class="x_content">
+
+            <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="home-tab" href="#" role="tab" aria-controls="home" aria-selected="true">Peripheral Request Form (PRF)</a>
+              </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+              {% if messages %}
+              {% for message in messages %}
+              <div {% if message.tags %} class="alert alert-{{message.tags}} alert-dismissible " role="alert" {% endif %}>
+                <strong style="text-transform:uppercase">{{message.tags}} :</strong> {{ message }}.
+              </div>
+              {% endfor %}
+              {% endif %}
+              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="x_title">
+                  <h2>Request By</h2>
+                
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    {% csrf_token %}
+                    <form method="POST" action="{% url 'submitprfdetail' %}" >
+                      {% csrf_token %}
+                    <input type="hidden" value="{{frequests.id}}" name="frequest_id" readonly class="form-control ">
+                    <input type="hidden" value="{{request.user.id}}" name="user_id" readonly class="form-control ">
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-4 col-sm-3 label-align" for="first-name">Nama Lengkap
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input type="text" value="{{employees.name}}" readonly id="first-name" required="required" class="form-control ">
+                      </div>
+                    </div>
+
+                  <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-4 col-sm-3 label-align" for="last-name">Department 
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input type="text" id="last-name" value="{% for depart in employees.departments.all %} {{ depart.name }}  {% endfor %}" readonly  name="last-name" required="required" class="form-control">
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label  class="col-form-label col-md-4 col-sm-3 label-align">NIK</label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input id="middle-name" value="{{employees.empid}}" readonly  class="form-control" type="text" name="middle-name">
+                      </div>
+                    </div>   
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label  class="col-form-label col-md-4 col-sm-3 label-align">Telephone</label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input id="middle-name" value="{{employees.phone}}" readonly  class="form-control" type="text" name="middle-name">
+                      </div>
+                    </div>
+              
+                    <h2> Request </h2>
+                
+
+                    <div class="col-md-12 col-sm-12  form-group">
+                      <label class="col-form-label col-md-2 col-sm-3 label-align">No PRF</label>
+                      <div class="col-md-7 col-sm-12">
+                        <input name="codenumber" value="{{frequests.code}}" readonly  id="middle-name" class="form-control" type="text" name="middle-name">
+                      </div>
+                    </div>
+
+                    <div class="col-md-12 col-sm-12  form-group">
+                      <label for="middle-name" class="col-form-label col-md-2 col-sm-3 label-align">Requested Item</label>
+                      <div class="col-md-7 col-sm-12">
+                        <input name="codenumber" value="{{frequests.item}}" disabled  id="middle-name" class="form-control" type="text" name="middle-name">
+                      </div>
+                    </div>
+
+                    <div class="col-md-12 col-sm-12  form-group">
+                      <label for="middle-name" class="col-form-label col-md-2 col-sm-3 label-align">DESCRIPTIONS</label>
+                      <div class="col-md-7 col-sm-12">
+                        <textarea readonly name="desc" id="formrequest"" required="required" class="form-control" name="message">{{frequests.description}}</textarea>
+                      </div>
+                    </div>
+
+                    <div class="x_title">                                      
+                      <div class="clearfix"></div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12  form-group">
+                      <h2>MIS Department</h2>
+                      <strong>[Answer]</strong> <br> 
+                      <div class="radio">  <br> 
+                        <label>
+                            <input  value="ACCEPTED" type="radio" {%if srfdetails.prf_accepted == 'ACCEPTED'%} checked {%endif%}  class="flat" name="approval"  {% if isapprover_mis and approver_wizard_level2|last == 'done' %} {%else%} disabled {%endif%}> Accepted
+                        </label> <br>
+                        <label>
+                          <input   value="REJECTED"  type="radio" {%if srfdetails.prf_accepted == 'REJECTED'%} checked {%endif%} class="flat" name="approval" {% if isapprover_mis and approver_wizard_level2|last == 'done' %} {%else%} disabled {%endif%}> Rejected
+                        </label><br>
+                        <label>
+                          <input  value="POSTPONED" type="radio" {%if srfdetails.prf_accepted == 'POSTPONED'%} checked {%endif%} class="flat" name="approval" {% if isapprover_mis and approver_wizard_level2|last == 'done' %} {%else%} disabled {%endif%}> Postponed
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12  form-group">
+                      <h2>&nbsp;</h2>
+
+                      <strong>[In Budget?]</strong> <br> 
+                      <div class="radio">  <br> 
+                        <label>
+                            <input value="True"  type="radio" {%if srfdetails.prf_inbudget == True%} checked {%endif%} class="flat" name="inbudget" {% if isapprover_mis and approver_wizard_level2|last == 'done' %} {%else%} disabled {%endif%}> Yes
+                        </label> <br>
+                        <label>
+                          <input value="False" type="radio" {%if srfdetails.prf_inbudget == False %} checked {%endif%} class="flat" name="inbudget" {% if isapprover_mis and approver_wizard_level2|last == 'done' %} {%else%} disabled {%endif%}> No
+                        </label><br>
+                        <label>
+                          <input value="True" type="radio" {%if srfdetails.prf_underfive == True %} checked {%endif%} class="flat" name="nominal" {% if isapprover_mis and approver_wizard_level2|last == 'done' %} {%else%} disabled {%endif%}> < Rp 5.000.000
+                        </label> <br>
+                        <label>
+                          <input value="False" type="radio" {%if srfdetails.prf_underfive == False %} checked {%endif%} class="flat" name="nominal" {% if isapprover_mis and approver_wizard_level2|last == 'done' %} {%else%} disabled {%endif%}> > Rp 5.000.000
+                        </label>
+                      </div>
+  
+                    </div>
+                   
+                    <div class="col-md-4 col-sm-12  form-group" >
+                      <h2>&nbsp;</h2>
+                      <strong>[Notes]</strong> <br> 
+                      <div class="radio">
+                        <br>
+                        <textarea  name="notes" id="formrequest" style="min-height: 100px;" class="form-control" name="message" {% if isapprover_mis and approver_wizard_level2|last == 'done' %} {%else%} disabled {%endif%}>{%if srfdetails.prf_notes%}{{srfdetails.prf_notes}}{%endif%}</textarea>
+                      </div>
+
+                    </div>
+
+                    <div class="col-md-12 col-sm-12  form-group">
+                      <div class="form-group float-right" style="text-align: right;">
+                          <button onclick="history.back()" class="btn btn-primary" type="button">Back</button>
+                          {% if isapprover_mis and approver_wizard_level2|last == 'done' %} 
+                          <button type="submit" class="btn btn-success" >Save  </button>
+                        {%endif%}
+          
+                      </div> 
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+        {% include 'helpdesk/approvalside.html' %}
+      
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,272 @@
+{% extends 'helpdesk/base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="right_col" role="main">
+  <div class="">
+    <div class="row">
+        <div class="col-md-10 col-sm-12 ">
+          <div class="x_content">
+          {% include 'helpdesk/approvalwizard.html'%}    
+
+          </div>
+               
+        </div>
+
+      </div>
+
+      <div class="clearfix"></div>
+      <div class="row">
+      
+      <div class="col-md-10 col-sm-12">
+        <div class="x_panel">
+
+          <div class="x_content">
+
+            <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="home-tab" href="#" role="tab" aria-controls="home" aria-selected="true">Service Request Form (SRF)</a>
+              </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+              {% if messages %}
+              {% for message in messages %}
+              <div {% if message.tags %} class="alert alert-{{message.tags}} alert-dismissible " role="alert" {% endif %}>
+                <strong style="text-transform:uppercase">{{message.tags}} :</strong> {{ message }}.
+              </div>
+              {% endfor %}
+              {% endif %}
+              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="x_title">
+                  <h2>Request By</h2>
+                
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    {% csrf_token %}
+                    <form method="POST" action="{% url 'submitsrfdetail' %}" >
+                      {% csrf_token %}
+                    <input type="hidden" value="{{frequests.id}}" name="frequest_id" readonly class="form-control ">
+                    <input type="hidden" value="{{request.user.id}}" name="user_id" readonly class="form-control ">
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-4 col-sm-3 label-align" for="first-name">Nama Lengkap
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input type="text" value="{{employees.name}}" readonly id="first-name" required="required" class="form-control ">
+                      </div>
+                    </div>
+
+                   <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-4 col-sm-3 label-align" for="last-name">Department 
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input type="text" id="last-name" value="{% for depart in employees.departments.all %} {{ depart.name }}  {% endfor %}" readonly  name="last-name" required="required" class="form-control">
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label  class="col-form-label col-md-4 col-sm-3 label-align">NIK</label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input id="middle-name" value="{{employees.empid}}" readonly  class="form-control" type="text" name="middle-name">
+                      </div>
+                    </div>   
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label  class="col-form-label col-md-4 col-sm-3 label-align">Telephone</label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input id="middle-name" value="{{employees.phone}}" readonly  class="form-control" type="text" name="middle-name">
+                      </div>
+                    </div>
+               
+                    <h2> Request </h2>
+                
+
+                    <div class="col-md-12 col-sm-12  form-group">
+                      <label class="col-form-label col-md-2 col-sm-3 label-align">No SRF</label>
+                      <div class="col-md-7 col-sm-12">
+                        <input name="codenumber" value="{{frequests.code}}" readonly  id="middle-name" class="form-control" type="text" name="middle-name">
+                      </div>
+                    </div>
+
+                    <div class="col-md-12 col-sm-12  form-group">
+                      <label for="middle-name" class="col-form-label col-md-2 col-sm-3 label-align">FAULT DESCRIPTIONS / REASON</label>
+                      <div class="col-md-7 col-sm-12">
+                        <textarea readonly name="desc" id="formrequest"" required="required" class="form-control" name="message">{{frequests.description}}</textarea>
+                      </div>
+                    </div>
+
+                    <div class="x_title">                                      
+                      <div class="clearfix"></div>
+                    </div>
+
+                    <div class="col-md-12 col-sm-12  form-group">
+                      <h2>MIS Department</h2>
+                      <strong>[Answer]</strong> <br> 
+  
+                    </div>
+
+                    
+                    <div class="col-md-4 col-sm-12  form-group">
+                      <label for="middle-name" class="col-form-label col-md-2 col-sm-3 label-align">
+                        Type:</label>
+                      <div class="col-md-10 col-sm-6 ">
+                        <input value="{{srfdetails.type}}" id="middle-name" class="form-control" type="text" name="type" {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED' %} readonly {%endif%} >
+                      </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12 form-group" >
+                      <label  class="col-form-label col-md-5 label-align">
+                        Start Date:</label>
+                      <div class="col-md-7" >
+                        <input value="{{srfdetails.startdate}}" name="startdate" type="text" id="date" class="date-picker form-control" placeholder=" " onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'"  {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED' %} readonly {%endif%}>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12 form-group">
+                      <label for="middle-name" class="col-form-label col-md-5 col-sm-3 label-align">
+                        Time:</label>
+                      <div class="col-md-7 col-sm-6 ">
+                        <input value="{{srfdetails.starttime}}" id="timepicker" class="form-control" type="text" name="starttime"  {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED'%} readonly {%endif%}>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-4 col-sm-12 form-group">
+                      <label for="middle-name" class="col-form-label col-md-2 col-sm-3 label-align">
+                        S/N:</label>
+                      <div class="col-md-10 col-sm-12 col-sm-6 ">
+                        <input value="{{srfdetails.sn}}" id="middle-name" class="form-control" type="text" name="sn"  {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED'%} readonly {%endif%}>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12 form-group">
+                      <label for="middle-name" class="col-form-label col-md-5 col-sm-3 label-align">
+                        Finish Date:</label>
+                      <div class="col-md-7 col-sm-6 ">
+                        <input value="{{srfdetails.finishdate}}" name="finishdate" type="text" id="date" class="date-picker form-control" placeholder=" " onfocus="this.type='date'" onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'"  {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED'%} readonly {%endif%}>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12 form-group">
+                      <label for="middle-name" class="col-form-label col-md-5 col-sm-12 label-align">
+                        Time:</label>
+                      <div class="col-md-7 col-sm-12 ">
+                        <input value="{{srfdetails.finishtime}}" id="timepicker1" class="form-control" type="text" name="finishtime"  {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED'%} readonly {%endif%}>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-2 col-sm-12 form-group">
+                      <label  class="col-form-label col-md-3 col-sm-3 label-align">
+                        Hardware:
+                      </label>
+                     
+                      <div class="col-md-12 col-sm-6 ">
+                        <div class="checkbox">
+                          <label>
+                            <input {%if "CPU" in srfdetails.hardware%} checked {%endif%} value="CPU" type="checkbox" class="flat" name="hardware"  {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED'%} disabled {%endif%} > CPU
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-12 col-sm-6 ">
+                        <div class="checkbox">
+                          <label>
+                            <input  {%if "Monitor" in srfdetails.hardware%} checked {%endif%} value="Monitor" type="checkbox" class="flat" name="hardware" {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED'%} disabled {%endif%}> Monitor
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-12 col-sm-6 ">
+                        <div class="checkbox">
+                          <label>
+                            <input {%if "Printer" in srfdetails.hardware%} checked {%endif%}  value="Printer" type="checkbox" class="flat" name="hardware" {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED'%} disabled {%endif%} > Printer
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-12 col-sm-6 ">
+                        <div class="checkbox">
+                          <label>
+                            <input {%if "Others" in srfdetails.hardware%} checked {%endif%} value="Others" type="checkbox" class="flat" name="hardware" {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED'%} disabled {%endif%}> Others
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div  class="col-md-2 col-sm-12 form-group">
+                      <label class="col-form-label col-md-3 col-sm-3 label-align">
+                        Software:
+                      </label>
+                      
+
+                      <div class="col-md-12 col-sm-6 ">
+                        <div class="checkbox">
+                          <label>
+                            <input {%if "Windows" in srfdetails.software%} checked {%endif%} value="Windows" type="checkbox" class="flat"  name="software" {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED'%} disabled {%endif%}> Windows
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-12 col-sm-6 ">
+                        <div class="checkbox">
+                          <label>
+                            <input {%if "Application" in srfdetails.software%} checked {%endif%} value="Application" type="checkbox" class="flat" name="software" {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED'%} disabled {%endif%}> Application
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-12 col-sm-6 ">
+                        <div class="checkbox">
+                          <label>
+                            <input {%if "Others" in srfdetails.software%} checked {%endif%}  value="Others" type="checkbox" class="flat" name="software" {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED'%} disabled {%endif%}> Others
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-8 col-sm-6 form-group">
+                      <label style="text-align: left;" class="col-form-label col-md-12 col-sm-2 label-align">
+                        Action Taken:
+                      </label>                      
+                      
+                      <div class="col-md-12 col-sm-12">
+                        <textarea style="min-height: 110px;"  name="action_taken" id="formrequest"" class="form-control" {%if not isapprover_mis or frequests.status == 'REJECTED' or frequests.status == 'DELAYED'%} disabled {%endif%}>{{srfdetails.description}}</textarea>
+                      </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12  form-group">
+                      <label  class="col-form-label col-md-8 col-sm-3 label-align">
+                        Engineer's Name:</label>
+                      <div class="col-md-4 col-sm-6 ">
+                        <input readonly value="{%if srfdetails.employee.name|length > 0 %} {{srfdetails.employee.name}} {%else%} {{employee_user.name}} {%endif%}" id="middle-name" class="form-control" type="text" name="engineername">
+                      </div>
+                    </div> 
+                    
+                    <div class="col-md-12 col-sm-12  form-group">
+	                    <div class="form-group float-right" style="text-align: right;">
+	                      
+	                        <button onclick="history.back()" class="btn btn-primary" type="button">Back</button>
+                          {%if isapprover_mis and frequests.status != 'REJECTED'%}  
+                            {%if frequests.status != 'DELAYED'%}
+	                            <button type="submit" class="btn btn-success" >Save  </button>
+                            {%endif%}
+                          {%endif%}
+	        
+	                    </div> 
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% include 'helpdesk/approvalside.html' %}
+        
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

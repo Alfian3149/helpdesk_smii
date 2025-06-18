@@ -1,0 +1,145 @@
+{% extends 'helpdesk/base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h4>Consumables Request Form (CRF)</h4>
+      </div>
+
+    </div>
+
+    <div class="clearfix"></div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="x_panel">
+
+          <div class="x_content">
+
+            <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="home-tab" href="{% url 'crf' %}" role="tab" aria-controls="home" aria-selected="true">Consumables Request Form (CRF)</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="profile-tab" href="{% url 'srf' %}" role="tab" aria-controls="profile" aria-selected="false">Service Request Form (SRF)</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="contact-tab" href="{% url 'prf' %}" role="tab" aria-controls="contact" aria-selected="false">Peripheral Request Form (PRF)</a>
+              </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+              {% if messages %}
+              {% for message in messages %}
+              <div {% if message.tags %} class="alert alert-{{message.tags}} alert-dismissible " role="alert" {% endif %}>
+                <strong style="text-transform:uppercase">{{message.tags}} :</strong> {{ message }}.
+              </div>
+              {% endfor %}
+              {% endif %}
+              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="x_title">
+                  <h2>Request By</h2>
+                
+                  <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                  <br />
+
+                  <form method="POST" action="{% url 'submitcrf' %}" id="demo-form2"  class="form-horizontal form-label-left"  >
+                    {% csrf_token %}
+
+                    <input type="hidden" value="{{employees.id}}" name="employee_id" readonly id="first-name" required="required" class="form-control ">
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-3 label-align" for="first-name">Nama
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input type="text" value="{{employees.name}}" readonly id="first-name" required="required" class="form-control ">
+                      </div>
+                    </div>
+
+                   <div class="col-md-6 col-sm-12  form-group">
+                      <label class="col-form-label col-md-3 label-align" for="last-name">Department 
+                      </label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <select  name="departselect" class="select2_single form-control" tabindex="-1">
+                        {% for depart in employees.departments.all %}   
+
+                        <option value="{{depart.id}}">{{ depart.name }}</option>
+                        
+                         {% endfor %}
+
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label for="middle-name" class="col-form-label col-md-3 col-sm-3 label-align">NIK</label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input id="middle-name" value="{{employees.empid}}" readonly  class="form-control" type="text" name="middle-name">
+                      </div>
+                    </div>   
+
+                    <div class="col-md-6 col-sm-12  form-group">
+                      <label for="middle-name" class="col-form-label col-md-3 col-sm-3 label-align">Telephone</label>
+                      <div class="col-md-8 col-sm-6 ">
+                        <input id="middle-name" value="{{employees.phone}}" readonly  class="form-control" type="text" name="middle-name">
+                      </div>
+                    </div>
+
+   
+                    <div class="x_title">
+                  		<h2> Request </h2>
+                
+                  		<div class="clearfix"></div>
+                	</div>
+
+
+                    <div class="col-md-9 col-sm-12  form-group">
+                      <label for="middle-name" class="col-form-label col-md-2 col-sm-3 label-align">No. CRF</label>
+                      <div class="col-md-7 col-sm-12">
+                        <input name="codenumber" value="{{lastcode}}" readonly  id="middle-name" class="form-control" type="text" name="middle-name">
+                      </div>
+                    </div>
+
+                    <div class="col-md-9 col-sm-12  form-group">
+                      <label for="middle-name" class="col-form-label col-md-2 col-sm-3 label-align">Item</label>
+                      <div class="col-md-7 col-sm-12">
+                          <select id="itemselect" name="itemcode" class="select2_single form-control" tabindex="-1">
+                              <option></option>
+                               {% for item in items %}
+
+                              <option value="{{item.id}}">{{item.item_name}}</option>
+                              
+                               {% endfor %}
+                          </select>
+                      </div>
+                    </div>
+
+  				        	<div class="col-md-12 col-sm-12  form-group">
+
+
+	                    <div class="form-group float-right" style="text-align: right;">
+	                      
+	                        <button class="btn btn-primary" type="button" onclick="history.back()">Back</button>
+	                        <button type="submit" class="btn btn-success">Submit</button>
+	        
+	                    </div> 
+              		  </div>
+
+                  </form>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

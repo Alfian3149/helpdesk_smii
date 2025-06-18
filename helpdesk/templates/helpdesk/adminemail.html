@@ -1,0 +1,18 @@
+{% if messages %}
+	{% for message in messages %}
+		{{ message }}
+	{% endfor %}
+{% endif %}
+<form method="GET"> 
+	<p><label>Subject</label>
+	<input type="text" name="subject_email"></p>
+	
+	<p><label>Body</label>
+	<textarea name="content_email"></textarea> </p>
+
+	<p><label>To email</label>
+	<input type="text" name="to_email"></p>
+
+	<p><button type="submit">Send</button></p>
+
+</form>

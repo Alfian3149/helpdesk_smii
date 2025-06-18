@@ -1,0 +1,141 @@
+{% extends 'helpdesk/base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="right_col" role="main">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="">
+                <div class="x_content">
+
+                    <div class="row">
+                        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6  ">
+                            <div class="tile-stats">
+                                <div class="icon"><i class="fa fa-keyboard-o"></i>
+                                </div>
+                                <div class="count">{{crfByEmployeeIDCount}}</div>
+
+                                <h3>CRF</h3>
+                                <p>Consumable Request Form</p>
+                            </div>
+                        </div>
+                        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6  ">
+                            <div class="tile-stats">
+                                <div class="icon"><i class="fa fa-code"></i>
+                                </div>
+                                <div class="count">{{srfByEmployeeIDCount}}</div>
+
+                                <h3>SRF</h3>
+                                <p>Service Request Form</p>
+                            </div>
+                        </div>
+                        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6  ">
+                            <div class="tile-stats">
+                                <div class="icon"><i class="fa fa-laptop"></i>
+                                </div>
+                                <div class="count">{{prfByEmployeeIDCount}}</div>
+
+                                <h3>PRF</h3>
+                                <p>Peripheral Request Form</p>
+                            </div>
+                        </div>
+                        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6  ">
+                            <div class="tile-stats">
+                                <div class="icon"><i class="fa fa-folder-open-o"></i>
+                                </div>
+                                <div class="count">{{cashAdvanceByEmployeeIDCount}}</div>
+
+                                <h3>CAF</h3>
+                                <p>Cash Advance Form</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                          <div class="x_panel">
+                            <div class="" >
+                              <div class="col-sm-12">
+                                {% for depart in employees.departments.all %}   
+
+                                <h3 ><i>
+                                    {{depart.name}} 
+                                   
+                                </i></h3>
+                                {%endfor%}
+                                <div class="left col-sm-7">
+                                  <h2>{{employees.name}}</h2>
+                                  <p><strong>Position: </strong> {{employees.position.name}} </p>
+                                  <ul class="list-unstyled">
+                                    <li><i class="fa fa-building"></i> Address: </li>
+                                    <li><i class="fa fa-mail-reply"></i> Email :{{employees.email}} </li>
+
+                                    <li><i class="fa fa-phone"></i> Phone :{{employees.phone}} </li>
+                                  </ul>
+                                </div>
+                                <div class="right col-sm-5 text-center">
+                                  <img src="{% static 'helpdesk/images/user.png' %}" alt="" class="img-circle img-fluid">
+                                </div>
+                              </div>
+                              <div class="bottom text-center">
+                                <div class=" col-sm-6 emphasis">
+                                
+                                </div>
+                                <div class=" col-sm-6 emphasis">
+                                  &nbsp; &nbsp; &nbsp;<a href="{% url 'changepassword' %}">
+                                  <button type="button" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-user"> </i> Change Password
+                                  </button>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                       
+                        <!-- Start to do list -->
+                        <div class="col-md-6 col-sm-6  ">
+                          <div class="x_panel">
+                            <div class="x_title">
+                              <h2>Feeds <small>Activities</small></h2>
+                       
+                              <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content">
+
+                              <div class="">
+                                
+                                <div class="mail_list">
+                                  {%for alllogin in AllLogins%}
+                                  <div class="left">
+                                    <i class="fa fa-bell-o"></i>
+                                  </div>
+                                  <div class="right">
+                                    <h3>Log in <small>{{alllogin.date|date:"D, d M Y h:i a"}} </small></h3>
+                                   
+                                  </div>
+                                  {%endfor%}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- End to do list -->
+
+                    </div>
+                        
+                </div>
+            </div>
+
+            
+            
+        </div>
+
+        
+    </div>
+</div>
+{% endblock %}
